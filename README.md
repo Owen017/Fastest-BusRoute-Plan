@@ -11,7 +11,3 @@
 #### cgi-bin文件夹中的两个.py为cgi环境中运行的网页，需要被放进Apache根目录下的cgi-bin文件夹内
 
 #### htdocs/pyhtml文件夹为Apache启动网站的主页存放位置
-
-#### 所需环境.docx讲了一下cgi配置的内容
-
-#### notice.txt为写算法时的一些心路历程
