@@ -11,3 +11,5 @@
 #### cgi-bin文件夹中的两个.py为cgi环境中运行的网页，需要被放进Apache根目录下的cgi-bin文件夹内
 
 #### htdocs/pyhtml文件夹为Apache启动网站的主页存放位置
+
+#### database文件夹中transport2.sql添加了虚拟末班车数据，解决末班车报错的问题
