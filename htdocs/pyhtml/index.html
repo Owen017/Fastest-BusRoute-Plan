@@ -1,1 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>最快交通路径查询</title>
+<link rel="stylesheet" type="text/css" href="./css/style4index.css">
+<link rel="stylesheet" href="./DateTimePicker/dest/datetime.min.css">
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<!--/*start和end文本及css交换*/-->
+<script type="text/javascript">
+	/*start和end文本及css交换*/
+	var flag = 1;
+	$(document).ready(function(){
+		$("#jiaohuan").click(function(){
+			if (flag==1){
+				// flag变0, 即虹桥到海湾
+    			$("#start").text("虹桥枢纽");
+    			$("#start").removeClass("start_shnu");
+    			$("#start").addClass("start_hq");
+    			//$("#start").css({"left":"666px","top":"135px"});
+	    		$("#end").text("上师大奉贤");
+	    		$("#end").removeClass("end_hq");
+	    		$("#end").addClass("end_shnu");
+	    		//$("#end").css({"left":"350px","top":"95px"});
+	    		flag = 0;
+	    		// 修改表单发送页面
+	    		$("#Form").attr("action","/cgi-bin/hq2hw.py");
+	    	}
+	    	else{
+	    		// flag变1, 即海湾到虹桥
+	    		$("#start").text("上师大奉贤");
+	    		$("#start").removeClass("start_hq");
+    			$("#start").addClass("start_shnu");
+	    		//$("#start").css({"left":"350px","top":"95px"});
+	    		$("#end").text("虹桥枢纽");
+	    		$("#end").removeClass("end_shnu");
+	    		$("#end").addClass("end_hq");
+	    		//$("#end").css({"left":"666px","top":"135px"});
+	    		flag = 1;
+	    		// 修改表单发送页面
+	    		$("#Form").attr("action","/cgi-bin/hw2hq.py");
+	    	}
+  		});
+	});
+</script>
+</head>
+<body>
 
+<div id="cong">从</div>
+<div id="start" class="start_shnu">上师大奉贤</div>
+<img id="jiaohuan" src="./pic/jiaohuan.png">
+<div id="zhi">至</div>
+<div id="end" class="end_hq">虹桥枢纽</div>
+<div id="time">当前时间</div>
+<div class="ui-datetime" id="datetime" style="font-weight:bold;width:300px;position:absolute;left:780px;top:60px"></div>
+<div id="chufa">出发</div>
+<form action="/cgi-bin/hw2hq.py" id="Form" method="GET">
+	<!--表单传输cgi-->
+	<input type="text" name="hour" value="" id="hour" style="display: none;"><br>
+	<input type="text" name="min" value="" id="min" style="display: none;">
+	<input type="button" id="go" value="GO!" onclick="subForm();" style="border-color:white;background-color: white;border:0px;">
+</form>
+<!--a id="go" href="/cgi-bin/hw2hq.py" target="_self">GO!</a-->
+</body>
+<script src="./DateTimePicker/dest/datetime.min.js"></script>
+<script src="./DateTimePicker/src/jquery.js"></script>
+<script src="./DateTimePicker/dest/JQuery.datetime.min.js"></script>
+<script type="text/javascript">
+	function subForm(){
+        $("#Form").submit();
+    }
+</script>
+<script type="text/javascript">
+    var myDate = new Date();
+    var hour = myDate.getHours();       //获取当前小时数(0-23)
+    var min = myDate.getMinutes();     //获取当前分钟数(0-59)
+    // 验证分钟数, 加0
+    if(min==0){
+        min = "00";
+    }else if(min<10){
+        min = "0" + String(min);
+    }else{
+        min = String(min);
+    }
+
+    // 验证小时数, 得以在滚轮中显示
+    if(hour>11){
+        if(hour>21){
+            hour = String(hour-12);
+        }else if(hour==12){
+            hour = "00";
+        }else{
+            hour = "0" + String(hour-12);
+        }
+        $("#datetime").datetime({
+            type: 'diy',//date,time,diy
+            date: new Date(),
+            minDate: new Date(),
+            maxDate: new Date(),
+            gap: false,
+            demotion: false,
+            data: [{
+                key: 'day',
+                resource: ["上午", "下午"],
+                value: "下午",
+                unit: ''
+            }, 
+            {
+                key: 'hour',
+                resource: ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11"],
+                value: hour,
+                unit: ''
+            }, 
+            {
+                key: 'minute',
+                resource: ["00", "01","02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27","28", "29","30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57","58", "59"],
+                value: min,
+                unit: ''
+            }],
+            onChange: function (data) {
+                console.log("call back", data);
+                // 传递data到form中
+                if(data.day=="上午"){
+                    document.querySelector("#hour").value = data.hour;
+                    document.querySelector("#min").value = data.minute;
+                }else{
+                    document.querySelector("#hour").value = (Number(data.hour)+12);
+                    document.querySelector("#min").value = (data.minute);
+                }
+            }
+        });
+    }else {
+        // hour小于等于11, 进入上午了
+        if(hour==0){
+            hour = "00";
+        }else if(hour<10){
+            hour = "0" + String(hour);
+        }else{
+            hour = String(hour);
+        }
+        $("#datetime").datetime({
+            type: 'diy',//date,time,diy
+            date: new Date(),
+            minDate: new Date(),
+            maxDate: new Date(),
+            gap: false,
+            demotion: false,
+            data: [{
+                key: 'day',
+                resource: ["上午", "下午"],
+                value: "上午",
+                unit: ''
+            }, 
+            {
+                key: 'hour',
+                resource: ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11"],
+                    value: hour,
+                    unit: ''
+            }, 
+            {
+                key: 'minute',
+                resource: ["00", "01","02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27","28", "29","30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57","58", "59"],
+                value: min,
+                unit: ''
+            }],
+            onChange: function (data) {
+                console.log("call back", data);
+                // 传递data到form中
+                if(data.day=="上午"){
+                    document.querySelector("#hour").value = data.hour;
+                    document.querySelector("#min").value = data.minute;
+                }else{
+                    document.querySelector("#hour").value = (Number(data.hour)+12);
+                    document.querySelector("#min").value = (data.minute);
+                }
+            }
+        });
+    }
+
+	// 点击当前时间后获取时间, 重生成时间滚轮, 分为上午和下午两个部分
+	$("#time").click(function(){
+		var myDate = new Date();
+		var hour = myDate.getHours();       //获取当前小时数(0-23)
+		var min = myDate.getMinutes();     //获取当前分钟数(0-59)
+		// 验证分钟数, 加0
+		if(min==0){
+			min = "00";
+		}else if(min<10){
+			min = "0" + String(min);
+		}else{
+			min = String(min);
+		}
+        // 直接把当前时间填入form
+        document.querySelector("#hour").value = hour;
+        document.querySelector("#min").value = min;
+
+        // 验证小时数, 得以在滚轮中显示
+		if(hour>11){
+			if(hour>21){
+				hour = String(hour-12);
+			}else if(hour==12){
+				hour = "00";
+			}else{
+				hour = "0" + String(hour-12);
+			}
+			$("#datetime").datetime({
+        		type: 'diy',//date,time,diy
+        		date: new Date(),
+        		minDate: new Date(),
+        		maxDate: new Date(),
+        		gap: false,
+        		demotion: false,
+        		data: [{
+            		key: 'day',
+            		resource: ["上午", "下午"],
+            		value: "下午",
+            		unit: ''
+        		}, 
+        		{
+            		key: 'hour',
+            		resource: ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11"],
+            		value: hour,
+            		unit: ''
+        		}, 
+        		{
+            		key: 'minute',
+            		resource: ["00", "01","02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27","28", "29","30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57","58", "59"],
+            		value: min,
+            		unit: ''
+        		}],
+        		onChange: function (data) {
+            		console.log("call back", data);
+            		// 传递data到form中
+            		if(data.day=="上午"){
+            			document.querySelector("#hour").value = data.hour;
+            			document.querySelector("#min").value = data.minute;
+            		}else{
+            			document.querySelector("#hour").value = (Number(data.hour)+12);
+		            	document.querySelector("#min").value = (data.minute);
+            		}
+        		}
+    		});
+		}else {
+			// hour小于等于11, 进入上午了
+			if(hour==0){
+				hour = "00";
+			}else if(hour<10){
+				hour = "0" + String(hour);
+			}else{
+				hour = String(hour);
+			}
+			$("#datetime").datetime({
+        		type: 'diy',//date,time,diy
+        		date: new Date(),
+        		minDate: new Date(),
+        		maxDate: new Date(),
+        		gap: false,
+        		demotion: false,
+        		data: [{
+            		key: 'day',
+            		resource: ["上午", "下午"],
+            		value: "上午",
+            		unit: ''
+        		}, 
+        		{
+            		key: 'hour',
+            		resource: ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11"],
+            		value: hour,
+            		unit: ''
+        		}, 
+        		{
+            		key: 'minute',
+            		resource: ["00", "01","02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27","28", "29","30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57","58", "59"],
+            		value: min,
+            		unit: ''
+        		}],
+        		onChange: function (data) {
+            		console.log("call back", data);
+            		// 传递data到form中
+            		if(data.day=="上午"){
+            			document.querySelector("#hour").value = data.hour;
+            			document.querySelector("#min").value = data.minute;
+            		}else{
+            			document.querySelector("#hour").value = (Number(data.hour)+12);
+		            	document.querySelector("#min").value = (data.minute);
+            		}
+        		}
+    		});
+		}
+	});
+
+
+</script>
+</html>
