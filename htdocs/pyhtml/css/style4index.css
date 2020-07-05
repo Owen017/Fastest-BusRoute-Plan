@@ -1,1 +1,113 @@
+﻿/*JS互换之后更改样式style="left:666px;top:95px;"*/
+
+#cong
+{
+	color: Darkslategray;
+	font-weight: bold;
+	font-size: 2.5em;
+	position:absolute;
+	left:180px;
+	top:260px;
+}
+
+#start
+{
+	color: #3cb371;
+	font-weight: bold;
+	width: 56px;
+	font-size: 3.5em;
+	position:absolute;
+	/*
+	left: 350px;
+	top: 95px;
+	*/
+}
+
+.start_shnu
+{
+	left: 330px;
+	top: 115px;
+}
+.start_hq
+{
+	left: 330px;
+	top: 148px;
+}
+
+#zhi
+{
+	color: Darkslategray;
+	font-weight: bold;
+	font-size: 2.5em;
+	position:absolute;
+	/*文字间隔110px*/
+	/*516由110+350+56得到*/
+	left:496px;
+	top:260px;
+}
+
+#jiaohuan
+{
+	width: 45px;
+	height: 45px;
+	position:absolute;
+	left:494px;
+	top:160px;
+}
+
+#end
+{
+	color: #3cb371;
+	font-weight: bold;
+	width: 56px;
+	font-size: 3.5em;
+	position:absolute;
+	/*666=110+516+40*/
+	/*
+	left: 666px;
+	top: 135px;
+	*/
+}
+
+.end_hq
+{
+	left: 646px;
+	top: 148px;
+}
+.end_shnu
+{
+	left: 646px;
+	top: 115px;
+}
+
+#time
+{
+	color: #3cb371;
+	font-weight: bold;
+	font-size: 2.4em;
+	position:absolute;
+	left:890px;
+	top:270px;
+}
+
+#chufa
+{
+	color: Darkslategray;
+	font-weight: bold;
+	font-size: 2.5em;
+	position:absolute;
+	left:1100px;
+	top:135px;
+}
+
+#go
+{
+	color: #3cb371;
+	font-weight: bold;
+	font-size: 4.2em;
+	position:absolute;
+	left:910px;
+	top:400px;
+}
+
 
